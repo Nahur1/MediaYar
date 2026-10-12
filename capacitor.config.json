@@ -1,0 +1,7 @@
+{
+  "appId": "ir.mediayar.app",
+  "appName": "مدیا یار",
+  "webDir": "web",
+  "android": { "allowMixedContent": false, "backgroundColor": "#FBF9FF" },
+  "server": { "androidScheme": "https" }
+}

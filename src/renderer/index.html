@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data: file:; media-src file: blob: mediastream:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مدیا یار</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="img/logo.svg" alt="" width="40" height="40">
+        <div class="brand-text"><strong>مدیا یار</strong><span>تبدیل و ویرایش رسانه</span></div>
+      </div>
+      <nav class="nav" aria-label="بخش‌ها">
+        <button class="nav-item active" data-page="video"><i data-icon="film"></i><span>تبدیل ویدیو</span></button>
+        <button class="nav-item" data-page="audio"><i data-icon="music"></i><span>تبدیل صوت</span></button>
+        <button class="nav-item" data-page="editor"><i data-icon="scissors"></i><span>ویرایش ویدیو</span></button>
+        <button class="nav-item" data-page="record" id="nav-record"><i data-icon="record"></i><span>ضبط صفحه</span></button>
+        <button class="nav-item" data-page="queue"><i data-icon="list"></i><span>صف کارها</span><b class="badge" id="queue-badge" hidden>0</b></button>
+      </nav>
+      <div class="mini" id="mini" hidden>
+        <div class="mini-name" id="mini-name"></div>
+        <div class="bar"><span id="mini-bar"></span></div>
+        <div class="mini-meta" id="mini-meta"></div>
+      </div>
+      <div class="theme-switch" role="group" aria-label="حالت نمایش">
+        <button data-theme-btn="light"><i data-icon="sun"></i>روشن</button>
+        <button data-theme-btn="dark"><i data-icon="moon"></i>تیره</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- ============================== VIDEO ============================== -->
+      <section class="page active" id="page-video">
+        <header class="page-head">
+          <h1>تبدیل ویدیو</h1>
+          <p>هر فرمت ویدیویی را به MP4 تبدیل کنید یا MP4 را به هر فرمت دلخواه.</p>
+        </header>
+        <div class="split">
+          <div class="col">
+            <div class="dropzone" id="video-drop" tabindex="0" role="button">
+              <div class="dz-icon"><i data-icon="upload"></i></div>
+              <div class="dz-title">فایل‌های ویدیو را اینجا رها کنید</div>
+              <div class="dz-sub">یا کلیک کنید تا انتخاب کنید · MKV، AVI، MOV، WMV، WEBM، FLV، MPEG، TS و…</div>
+            </div>
+            <div class="list-head" id="video-list-head" hidden>
+              <span id="video-count"></span>
+              <button class="btn ghost sm" id="video-clear"><i data-icon="trash"></i>پاک کردن همه</button>
+            </div>
+            <div class="file-list" id="video-files"></div>
+          </div>
+          <aside class="panel">
+            <div class="field">
+              <label>فرمت خروجی</label>
+              <div class="chips" id="video-format"></div>
+            </div>
+            <div class="field" id="video-codec-field">
+              <label>کدک تصویر</label>
+              <div class="seg" id="video-codec"></div>
+            </div>
+            <div class="field">
+              <label>کیفیت</label>
+              <div class="seg" id="video-quality"></div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="video-res">رزولوشن</label>
+                <select id="video-res"></select>
+              </div>
+              <div class="field" id="video-speed-field">
+                <label for="video-speed">سرعت</label>
+                <select id="video-speed"></select>
+              </div>
+            </div>
+            <label class="switch" id="video-smart-field">
+              <input type="checkbox" id="video-smart">
+              <span class="track"></span>
+              <span class="switch-text"><b>حفظ کیفیت اصلی</b><small>در صورت امکان بدون رمزگذاری مجدد؛ بسیار سریع و بدون افت کیفیت</small></span>
+            </label>
+            <button class="btn-cta" id="video-start" disabled><i data-icon="play"></i><span>شروع تبدیل</span></button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== AUDIO ============================== -->
+      <section class="page" id="page-audio">
+        <header class="page-head">
+          <h1>تبدیل صوت</h1>
+          <p>فرمت‌های صوتی را به هم تبدیل کنید یا صدای یک ویدیو را جدا کنید.</p>
+        </header>
+        <div class="split">
+          <div class="col">
+            <div class="dropzone" id="audio-drop" tabindex="0" role="button">
+              <div class="dz-icon"><i data-icon="upload"></i></div>
+              <div class="dz-title">فایل‌های صوتی یا ویدیویی را اینجا رها کنید</div>
+              <div class="dz-sub">یا کلیک کنید · MP3، WAV، FLAC، OGG، M4A، WMA، OPUS و…</div>
+            </div>
+            <div class="list-head" id="audio-list-head" hidden>
+              <span id="audio-count"></span>
+              <button class="btn ghost sm" id="audio-clear"><i data-icon="trash"></i>پاک کردن همه</button>
+            </div>
+            <div class="file-list" id="audio-files"></div>
+          </div>
+          <aside class="panel">
+            <div class="field">
+              <label>فرمت خروجی</label>
+              <div class="chips" id="audio-format"></div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="audio-bitrate">بیت‌ریت</label>
+                <select id="audio-bitrate"></select>
+              </div>
+              <div class="field">
+                <label for="audio-rate">نرخ نمونه‌برداری</label>
+                <select id="audio-rate"></select>
+              </div>
+            </div>
+            <div class="field">
+              <label>کانال‌ها</label>
+              <div class="seg" id="audio-channels"></div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="audio-normalize">
+              <span class="track"></span>
+              <span class="switch-text"><b>یکسان‌سازی بلندی صدا</b><small>صدای ضعیف یا خیلی بلند را به سطح استاندارد می‌رساند</small></span>
+            </label>
+            <button class="btn-cta" id="audio-start" disabled><i data-icon="play"></i><span>شروع تبدیل</span></button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== EDITOR ============================= -->
+      <section class="page" id="page-editor">
+        <header class="page-head">
+          <h1>ویرایش ویدیو</h1>
+          <p>برش زمانی، برش کادر، چرخش و کاهش حجم ویدیو بدون افت محسوس کیفیت.</p>
+        </header>
+        <div class="dropzone big" id="editor-drop" tabindex="0" role="button">
+          <div class="dz-icon"><i data-icon="scissors"></i></div>
+          <div class="dz-title">یک ویدیو برای ویرایش انتخاب کنید</div>
+          <div class="dz-sub">فایل را اینجا رها کنید یا کلیک کنید</div>
+        </div>
+        <div class="editor" id="editor" hidden>
+          <div class="col">
+            <div class="player-card">
+              <div class="player">
+                <video id="ed-video" preload="auto"></video>
+                <img id="ed-frame" alt="" hidden>
+                <div class="player-note" id="ed-note" hidden>پیش‌نمایش این فرمت مستقیم پخش نمی‌شود؛ تصویر فریم‌ها نمایش داده می‌شود.</div>
+              </div>
+              <div class="timeline" id="timeline" dir="ltr">
+                <div class="tl-track" id="tl-track">
+                  <div class="tl-strip" id="tl-strip"></div>
+                  <div class="tl-dim left" id="tl-dim-l"></div>
+                  <div class="tl-dim right" id="tl-dim-r"></div>
+                  <div class="tl-sel" id="tl-sel"></div>
+                  <div class="tl-head" id="tl-head"></div>
+                  <button class="tl-handle" id="tl-start" aria-label="نقطه‌ی شروع"></button>
+                  <button class="tl-handle" id="tl-end" aria-label="نقطه‌ی پایان"></button>
+                </div>
+              </div>
+              <div class="transport">
+                <button class="btn sm" id="ed-set-start" title="کلید I"><i data-icon="flagStart"></i>شروع از اینجا</button>
+                <div class="transport-mid">
+                  <button class="icon-btn" id="ed-back" aria-label="۵ ثانیه عقب"><i data-icon="back5"></i></button>
+                  <button class="icon-btn primary" id="ed-play" aria-label="پخش"><i data-icon="play"></i></button>
+                  <button class="icon-btn" id="ed-fwd" aria-label="۵ ثانیه جلو"><i data-icon="fwd5"></i></button>
+                  <span class="time" id="ed-time" dir="ltr">00:00:00.000</span>
+                </div>
+                <button class="btn sm" id="ed-set-end" title="کلید O"><i data-icon="flagEnd"></i>پایان تا اینجا</button>
+              </div>
+              <div class="range-row">
+                <div class="field inline"><label for="ed-start">شروع</label><input id="ed-start" class="time-input" dir="ltr" spellcheck="false"></div>
+                <div class="field inline"><label for="ed-end">پایان</label><input id="ed-end" class="time-input" dir="ltr" spellcheck="false"></div>
+                <div class="range-len">مدت بازه: <b id="ed-len" dir="ltr">0</b></div>
+              </div>
+              <div class="field-row two">
+                <div class="field">
+                  <label>کار با بازه‌ی انتخاب‌شده</label>
+                  <div class="seg" id="ed-cutmode"></div>
+                </div>
+                <label class="switch compact">
+                  <input type="checkbox" id="ed-precise">
+                  <span class="track"></span>
+                  <span class="switch-text"><b>برش دقیق فریم‌به‌فریم</b><small>خاموش: سریع و بدون افت کیفیت، ابتدای برش روی نزدیک‌ترین کی‌فریم</small></span>
+                </label>
+              </div>
+            </div>
+            <div class="file-chip" id="ed-file"></div>
+          </div>
+
+          <aside class="panel">
+            <div class="field">
+              <label>برش کادر (نسبت تصویر)</label>
+              <div class="chips small" id="ed-crop"></div>
+            </div>
+            <div class="field">
+              <label>چرخش</label>
+              <div class="seg" id="ed-rotate"></div>
+            </div>
+            <div class="field">
+              <label>آینه</label>
+              <div class="seg" id="ed-flip"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="field">
+              <label>کاهش حجم</label>
+              <div class="options" id="ed-compress"></div>
+              <div class="size-input" id="ed-size-wrap" hidden>
+                <input type="number" id="ed-size" min="1" step="1" dir="ltr"><span>مگابایت</span>
+              </div>
+            </div>
+            <div class="field-row" id="ed-compress-extra">
+              <div class="field">
+                <label for="ed-codec">کدک</label>
+                <select id="ed-codec"></select>
+              </div>
+              <div class="field">
+                <label for="ed-res">رزولوشن</label>
+                <select id="ed-res"></select>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <label class="switch">
+              <input type="checkbox" id="ed-mute">
+              <span class="track"></span>
+              <span class="switch-text"><b>حذف صدا</b><small>ویدیو بدون صدا ذخیره می‌شود</small></span>
+            </label>
+            <div class="field">
+              <label>فرمت خروجی</label>
+              <div class="chips small" id="ed-format"></div>
+            </div>
+            <div class="summary" id="ed-summary"></div>
+            <button class="btn-cta" id="ed-save" disabled><i data-icon="save"></i><span>ذخیره‌ی ویدیو</span></button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== RECORD ============================= -->
+      <section class="page" id="page-record">
+        <header class="page-head">
+          <h1>ضبط صفحه</h1>
+          <p>از کل صفحه یا بخشی دلخواه از آن فیلم بگیرید؛ همراه با صدای سیستم یا میکروفون.</p>
+        </header>
+        <div class="split">
+          <div class="col">
+            <div class="rec-stage" id="rec-stage">
+              <div class="rec-view" id="rec-view" hidden>
+                <video id="rec-preview" muted playsinline></video>
+                <div class="rec-area" id="rec-area" hidden></div>
+              </div>
+              <div class="rec-empty" id="rec-empty">
+                <div class="dz-icon"><i data-icon="monitor"></i></div>
+                <b>آماده‌ی ضبط</b>
+                <span>تنظیمات را انتخاب کنید و «شروع ضبط» را بزنید.</span>
+              </div>
+              <div class="rec-badge" id="rec-badge" hidden><span class="dot"></span><b id="rec-timer" dir="ltr">00:00</b><span id="rec-state">در حال ضبط</span></div>
+              <div class="rec-count" id="rec-count" hidden></div>
+            </div>
+            <div class="rec-controls">
+              <button class="btn-cta rec" id="rec-start"><i data-icon="record"></i><span>شروع ضبط</span></button>
+              <button class="btn" id="rec-pause" hidden><i data-icon="pause"></i><span>توقف موقت</span></button>
+              <button class="btn danger solid" id="rec-stop" hidden><i data-icon="stop"></i><span>پایان و ذخیره</span></button>
+            </div>
+            <p class="rec-tip" id="rec-tip"></p>
+          </div>
+          <aside class="panel">
+            <div class="field">
+              <label>محدوده‌ی ضبط</label>
+              <div class="options" id="rec-mode"></div>
+              <div class="region-row" id="rec-region-row" hidden>
+                <i data-icon="region"></i>
+                <span id="rec-region-text">هنوز محدوده‌ای انتخاب نشده</span>
+                <button class="btn sm" id="rec-region-pick" type="button">انتخاب با ماوس</button>
+              </div>
+            </div>
+            <div class="field" id="rec-display-field" hidden>
+              <label for="rec-display">نمایشگر</label>
+              <select id="rec-display"></select>
+            </div>
+            <div class="field">
+              <label>صدا</label>
+              <div class="seg" id="rec-audio"></div>
+              <small class="field-note" id="rec-audio-note" hidden></small>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="rec-fps">نرخ فریم</label>
+                <select id="rec-fps"></select>
+              </div>
+              <div class="field">
+                <label for="rec-quality">کیفیت</label>
+                <select id="rec-quality"></select>
+              </div>
+            </div>
+            <label class="switch" id="rec-hide-field">
+              <input type="checkbox" id="rec-hide">
+              <span class="track"></span>
+              <span class="switch-text"><b>پنهان کردن مدیا یار هنگام ضبط</b><small>یک نوار کوچک برای توقف و پایان روی صفحه می‌ماند (در ویدیو دیده نمی‌شود)</small></span>
+            </label>
+            <label class="switch">
+              <input type="checkbox" id="rec-countdown">
+              <span class="track"></span>
+              <span class="switch-text"><b>شمارش معکوس ۳ ثانیه‌ای</b><small>قبل از شروع ضبط فرصت آماده شدن دارید</small></span>
+            </label>
+            <div class="field">
+              <label>محل ذخیره</label>
+              <div class="outdir" id="rec-outdir"></div>
+              <small class="field-note" id="rec-out-note">پس از پایان ضبط، پنجره‌ی ذخیره با همین پوشه باز می‌شود تا نام و محل فایل را تأیید یا عوض کنید.</small>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================== QUEUE ============================== -->
+      <section class="page" id="page-queue">
+        <header class="page-head row">
+          <div>
+            <h1>صف کارها</h1>
+            <p>پیشرفت تبدیل‌ها را اینجا ببینید. کارها یکی‌یکی و با حداکثر سرعت انجام می‌شوند.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" id="q-clear"><i data-icon="trash"></i>پاک کردن تمام‌شده‌ها</button>
+            <button class="btn danger" id="q-cancel-all"><i data-icon="stop"></i>لغو همه</button>
+          </div>
+        </header>
+        <div class="jobs" id="jobs"></div>
+        <div class="empty" id="jobs-empty">
+          <div class="empty-icon"><i data-icon="list"></i></div>
+          <b>صف خالی است</b>
+          <span>از بخش‌های تبدیل یا ویرایش، فایلی اضافه کنید.</span>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="js/ui.js"></script>
+  <script src="js/filelist.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/thumbs.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/region.js"></script>
+  <script src="js/record.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

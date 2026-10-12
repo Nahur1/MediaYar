@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'">
+  <title>کنترل ضبط</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="aux.css">
+</head>
+<body class="aux-control" data-state="countdown">
+  <div class="cb">
+    <span class="cb-grip" title="جابه‌جا کردن"></span>
+    <span class="cb-dot"></span>
+    <b class="cb-time" id="time" dir="ltr">00:00</b>
+    <span class="cb-state" id="state">آماده‌سازی…</span>
+    <button class="cb-btn" id="pause" title="توقف موقت"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+    <button class="cb-btn stop" id="stop" title="پایان و ذخیره"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>پایان</span></button>
+  </div>
+  <script src="control.js"></script>
+</body>
+</html>

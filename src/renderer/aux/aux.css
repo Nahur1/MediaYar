@@ -1,0 +1,34 @@
+html, body { background: transparent !important; margin: 0; height: 100%; overflow: hidden; min-width: 0 !important; min-height: 0 !important; }
+body { user-select: none; -webkit-user-select: none; }
+
+/* ---------- region overlay */
+.aux-region .ov { position: fixed; inset: 0; cursor: crosshair; background: rgba(23, 18, 31, .38); overflow: hidden; }
+.aux-region .ov.rs-has { background: transparent; }
+.ov-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 8px; align-items: center;
+  padding: 18px 26px; border-radius: 14px; background: var(--surface); color: var(--text); box-shadow: var(--shadow-pop); text-align: center; pointer-events: none; }
+.ov-hint b { font-size: 17px; }
+.ov-hint span { font-size: 13px; color: var(--text-2); }
+.ov-hint[hidden], .ov-bar[hidden] { display: none; }
+.ov-bar { position: absolute; transform: translateX(-50%); display: flex; gap: 8px; padding: 8px; border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-pop); cursor: default; z-index: 3; }
+
+/* ---------- floating control bar */
+.aux-control .cb { position: fixed; inset: 4px; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 12px; border-radius: 14px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); box-shadow: 0 4px 14px rgba(0, 0, 0, .18); font-size: 13px; }
+.cb-grip { width: 10px; align-self: stretch; margin: 10px 0; border-radius: 4px; -webkit-app-region: drag; cursor: move;
+  background-image: radial-gradient(var(--text-3) 1.2px, transparent 1.3px); background-size: 5px 5px; }
+.cb-dot { width: 10px; height: 10px; flex: none; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 4px rgba(229, 72, 77, .18); animation: cb-pulse 1.2s ease-in-out infinite; }
+[data-state='paused'] .cb-dot { animation: none; background: var(--yellow-strong); box-shadow: none; }
+[data-state='countdown'] .cb-dot { animation: none; background: var(--purple); box-shadow: none; }
+@keyframes cb-pulse { 50% { opacity: .35; } }
+.cb-time { font-size: 16px; font-variant-numeric: tabular-nums; min-width: 52px; }
+.cb-state { flex: 1; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-btn { height: 38px; min-width: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 10px;
+  background: var(--surface-2); color: var(--text); cursor: pointer; font: inherit; font-weight: 700; padding: 0 8px; }
+.cb-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.cb-btn:hover { background: var(--surface-3); }
+.cb-btn:disabled { opacity: .4; cursor: default; }
+.cb-btn.stop { background: #E5484D; color: #fff; padding: 0 12px; }
+.cb-btn.stop:hover { background: #CE3B40; }
+
+/* ---------- region frame while recording */
+.aux-frame .fr { position: fixed; inset: 0; border: 3px dashed #8B5CF6; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .7); }

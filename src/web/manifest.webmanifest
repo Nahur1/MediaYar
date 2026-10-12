@@ -1,0 +1,22 @@
+{
+  "name": "مدیا یار — تبدیل و ویرایش رسانه",
+  "short_name": "مدیا یار",
+  "description": "تبدیل ویدیو، تبدیل صوت و ویرایش ساده‌ی ویدیو، کاملاً روی دستگاه شما",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "dir": "rtl",
+  "lang": "fa",
+  "background_color": "#FBF9FF",
+  "theme_color": "#8B5CF6",
+  "categories": ["multimedia", "utilities", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "img/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

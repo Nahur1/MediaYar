@@ -1,0 +1,16 @@
+{
+  "name": "mediayar",
+  "productName": "Media Yar",
+  "version": "1.2.0",
+  "description": "مدیا یار — تبدیل ویدیو، تبدیل صوت و ویرایش ساده‌ی ویدیو",
+  "main": "src/main/main.js",
+  "author": "Media Yar",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/unit.test.js && node --test --test-concurrency=1 test/integration.test.js",
+    "test:unit": "node --test test/unit.test.js",
+    "test:e2e": "node test/e2e.js",
+    "icons": "node scripts/make-icons.js",
+    "build:win": "node scripts/build-win.js"
+  }
+}

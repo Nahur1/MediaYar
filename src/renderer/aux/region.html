@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:">
+  <title>انتخاب محدوده</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="aux.css">
+</head>
+<body class="aux-region">
+  <div class="ov" id="ov">
+    <div class="ov-hint" id="hint" data-rs-ignore>
+      <b>برای انتخاب محدوده‌ی ضبط، با ماوس یک کادر بکشید</b>
+      <span>Enter: تأیید · Esc: انصراف · بعد از کشیدن می‌توانید کادر را جابه‌جا کنید یا اندازه‌اش را تغییر دهید</span>
+    </div>
+    <div class="ov-bar" id="bar" data-rs-ignore hidden>
+      <button class="btn primary" id="ok">تأیید محدوده</button>
+      <button class="btn" id="full">کل این صفحه</button>
+      <button class="btn ghost" id="cancel">انصراف</button>
+    </div>
+  </div>
+  <script src="../js/region.js"></script>
+  <script src="region.js"></script>
+</body>
+</html>
