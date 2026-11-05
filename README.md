@@ -3,7 +3,8 @@
 One codebase, three targets: **Windows desktop** (Electron + native FFmpeg), **web app / PWA**
 (FFmpeg compiled to WebAssembly, everything runs on the user's device), and **Android APK**
 (the PWA wrapped with Capacitor or a TWA). Video converter, audio converter, a simple video editor and a screen recorder.
-Persian RTL UI, purple/yellow theme, light & dark modes, responsive down to phone screens.
+Persian RTL UI with a glass design inspired by macOS, blue accents, light & dark modes,
+and a floating navigation dock on phones. See `TEST-REPORT.fa.md` for verification and limitations.
 
 ## Architecture — change once, ship everywhere
 ```
@@ -34,13 +35,22 @@ MediaRecorder chunks -> sink (temp file on desktop, Blobs on the web) -> a `reco
 Region selection is stored as ratios and cropped by ffmpeg, so it is resolution-independent.
 
 ## Commands
+    npm ci
     npm run test:unit
     npm test                          # unit + integration (needs ffmpeg/ffprobe on PATH)
     node test/e2e.js                  # desktop UI end-to-end (Linux Electron + X display)
     node scripts/build-web.js         # -> dist/web  (static site / PWA)
-    node test/web-e2e.js              # web end-to-end in headless Chromium with real ffmpeg.wasm
+    npx playwright install chromium
+    npm run test:web                 # real ffmpeg.wasm conversions and recording in Chromium
+    npm run test:layout              # start the server on 8080 first; 50 page/theme/size combinations
     node scripts/serve-web.js dist/web 8080
     node scripts/build-win.js <electron-win32-x64-dir> <ffmpeg-win64-bin-dir> <out-dir>
+    node scripts/package-desktop.js  # refresh a portable build using existing builds/win64 runtime
+    npm run build:android            # JDK 21 + Android SDK 36 -> builds/android/MediaYar-debug.apk
+
+`npm test` generates its own synthetic media fixtures (FFmpeg/FFprobe required on PATH).
+Set `CHROME` to override the installed Playwright browser. Set `ELECTRON_BIN` to override the
+desktop test runtime; `MEDIAYAR_PACKAGED=1` tests the packaged app rather than workspace sources.
 
 ## Web / PWA / APK
 See `WEB-PWA-APK.md`.

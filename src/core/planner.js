@@ -382,8 +382,15 @@ function planEdit({ input, probe, opts = {} }) {
     audioKbps = bp.audioKbps;
     enc = { kbps: bp.videoKbps, speed: 'balanced', twoPass: true };
   } else if (compress.mode === 'smart') {
-    enc = { quality: 'medium', speed: codecKey === 'h264' ? 'best' : 'balanced' };
-    audioKbps = 128;
+    // CRF alone can grow already-compressed or complex sources. Budget smart
+    // compression against the selected duration so "smaller" is meaningful.
+    const srcBytes = M.num(probe.format && probe.format.size);
+    if (!srcBytes) throw new PlanError('حجم فایل اصلی قابل تشخیص نیست؛ از حجم دلخواه استفاده کنید.');
+    targetBytes = srcBytes * (outDur / total) * 0.45;
+    const bp = M.planBitrate({ targetBytes, duration: outDur, hasAudio: !mute });
+    if (!bp.ok) throw new PlanError('این فایل از قبل بسیار فشرده است؛ حالت بدون کاهش حجم را انتخاب کنید.');
+    audioKbps = bp.audioKbps;
+    enc = { kbps: bp.videoKbps, speed: 'balanced', twoPass: true };
   } else {
     enc = { quality: 'high', speed: 'balanced' };
   }

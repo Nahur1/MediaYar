@@ -12,7 +12,7 @@ const recorder = require('./recorder');
 const APP_NAME = 'Media Yar';
 const ROOT = path.join(__dirname, '..', '..');
 const SETTINGS_FILE = () => path.join(app.getPath('userData'), 'settings.json');
-const THEME_BG = { light: '#FBF9FF', dark: '#15111E' };
+const THEME_BG = { light: '#edf2fa', dark: '#0e1728' };
 
 app.setName(APP_NAME);
 if (process.platform === 'win32') app.setAppUserModelId('ir.mediayar.app');

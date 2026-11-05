@@ -23,6 +23,12 @@ window.SaveAsk = (() => {
       let wrap = null;
       const onKey = (e) => {
         if (e.key === 'Escape') { e.preventDefault(); close(null); }
+        if (e.key === 'Tab' && wrap) {
+          const controls = [...wrap.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex="0"]')].filter(el => el.getClientRects().length);
+          const first = controls[0], last = controls[controls.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
       };
       function close(v) {
         if (!wrap) return;
@@ -56,7 +62,7 @@ window.SaveAsk = (() => {
         return [
           h('label', { class: 'modal-label', text: 'نام فایل' }),
           h('div', { class: 'name-row' }, input, h('span', { class: 'ext', dir: 'ltr', text: `.${ext}` })),
-          h('div', { class: 'loc' }, icon('download'), h('span', { text: 'محل ذخیره: پوشه‌ی دانلودهای مرورگر (طبق تنظیمات مرورگر)' })),
+          h('div', { class: 'loc' }, icon('download'), h('span', { text: caps().nativeExport ? 'پس از پایان پردازش، «ذخیره / اشتراک» را بزنید و مقصد فایل را انتخاب کنید.' : 'محل ذخیره: پوشه‌ی دانلودهای مرورگر (طبق تنظیمات مرورگر)' })),
         ];
       },
       actions: (close) => [
@@ -92,7 +98,7 @@ window.SaveAsk = (() => {
     const pathText = h('div', { class: 'opt-path', dir: 'auto' });
     const optDef = h('button', { type: 'button', class: 'opt wide', 'data-save': 'default', onclick: () => pick('default') },
       h('b', {}, icon(c.reveal ? 'folder' : 'download'), def),
-      h('small', { text: c.reveal ? 'هر خروجی در همان پوشه‌ی فایل اصلی خودش ذخیره می‌شود (پیش‌فرض)' : 'فایل‌ها به پوشه‌ی دانلودهای مرورگر می‌روند (پیش‌فرض)' }));
+      h('small', { text: c.reveal ? 'هر خروجی در همان پوشه‌ی فایل اصلی خودش ذخیره می‌شود (پیش‌فرض)' : c.nativeExport ? 'پس از پایان، با «ذخیره / اشتراک» فایل‌ها را به محل دلخواه بفرستید.' : 'فایل‌ها به پوشه‌ی دانلودهای مرورگر می‌روند (پیش‌فرض)' }));
     const choose = h('button', {
       class: 'btn sm', type: 'button', 'data-save': 'choose', onclick: async (e) => {
         e.stopPropagation();

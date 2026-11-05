@@ -12,7 +12,18 @@ const ROOT = path.join(__dirname, '..');
 const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'dist', 'web'));
 const TOOLS = process.env.TOOLS_DIR || '/data/tools/node_modules';
 const req = (m) => { try { return require(m); } catch { return require(path.join(TOOLS, m)); } };
-const modDir = (m) => { try { return path.dirname(require.resolve(`${m}/package.json`)); } catch { return path.join(TOOLS, m); } };
+const modDir = (m) => {
+  // Some packages intentionally hide package.json in their exports map.
+  try {
+    let dir = path.dirname(require.resolve(m));
+    while (!fs.existsSync(path.join(dir, 'package.json'))) {
+      const parent = path.dirname(dir);
+      if (parent === dir) throw new Error(`Cannot locate ${m}`);
+      dir = parent;
+    }
+    return dir;
+  } catch { return path.join(TOOLS, m); }
+};
 const esbuild = req('esbuild');
 const sharp = req('sharp');
 const pkg = require(path.join(ROOT, 'package.json'));
@@ -76,7 +87,7 @@ const hash = (buf) => crypto.createHash('sha256').update(buf).digest('hex').slic
   html = html.replace(/<meta name="viewport"[^>]*>/, '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">');
   html = html.replace(/<link rel="stylesheet" href="css\/app.css">/, [
     '<meta name="description" content="تبدیل ویدیو و صوت و ویرایش ساده‌ی ویدیو، کاملاً روی دستگاه شما — بدون آپلود.">',
-    '<meta name="theme-color" content="#FBF9FF">',
+    '<meta name="theme-color" content="#edf2fa">',
     '<meta name="mobile-web-app-capable" content="yes">',
     '<meta name="apple-mobile-web-app-capable" content="yes">',
     '<meta name="apple-mobile-web-app-title" content="مدیا یار">',
@@ -96,7 +107,7 @@ const hash = (buf) => crypto.createHash('sha256').update(buf).digest('hex').slic
   const shell = ['./', './index.html', `./css/app.css?v=${vCss}`, `./js/platform.js?v=${vPlat}`, `./js/app.js?v=${vApp}`,
     './fonts/Vazirmatn.woff2', './img/logo.svg', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png',
     ...fs.readdirSync(path.join(OUT, 'vendor', 'ffmpeg')).map((f) => `./vendor/ffmpeg/${f}`)];
-  const version = `${pkg.version}-${hash(vPlat + vApp + vCss)}`;
+  const version = `${pkg.version}-${hash(vPlat + vApp + vCss + svg.toString() + fs.readFileSync(path.join(W, 'manifest.webmanifest'), 'utf8'))}`;
   fs.writeFileSync(path.join(OUT, 'sw.js'), fs.readFileSync(path.join(W, 'sw.js'), 'utf8')
     .replace('__VERSION__', version).replace('__SHELL_FILES__', JSON.stringify(shell, null, 2)));
   fs.writeFileSync(path.join(OUT, '_headers'), [

@@ -8,6 +8,7 @@ const F = require('../core/formats');
 const { createService } = require('../core/service');
 const { Engine, Assets } = require('./engine');
 const { WasmHost } = require('./wasm-host');
+const Native = require('./native');
 
 // Encoders present *and stable* in the bundled ffmpeg.wasm core: libvpx-vp9 and stereo libopus trap
 // in wasm, so WEBM uses VP8 and Opus uses FFmpeg's native encoder; AMR has no encoder in this build.
@@ -77,6 +78,7 @@ async function writeToDir(dir, out) {
 
 /** Hand a finished output to the user: chosen folder (File System Access) or a normal download. */
 async function deliver(job, out) {
+  if (Native.isAndroid) { await Native.cacheOutput(out); return; }
   const t = job.outputPath && targets.get(job.outputPath);
   const dir = job.outputDir && dirs.get(job.outputDir);
   try {
@@ -185,7 +187,9 @@ const api = {
     version: '1.2.0',
     platform: 'web',
     caps: {
-      outputDir: canPickDir, reveal: false, download: true, share: canShare, defaultOut: 'پوشه‌ی دانلودها',
+      outputDir: canPickDir, reveal: false, download: !Native.isAndroid, share: Native.isAndroid || canShare,
+      nativeExport: Native.isAndroid, play: !Native.isAndroid,
+      defaultOut: Native.isAndroid ? 'ذخیره در برنامه؛ سپس اشتراک خروجی' : 'پوشه‌ی دانلودها',
       saveDialog: canSaveAs, screenRecord: canRecord, regionOverlay: false, hideApp: false, systemAudio: canRecord,
     },
   }),
@@ -193,7 +197,7 @@ const api = {
     const theme = t === 'dark' ? 'dark' : 'light';
     localStorage.setItem(THEME_KEY, theme);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#15111E' : '#FBF9FF';
+    if (meta) meta.content = theme === 'dark' ? '#0e1728' : '#edf2fa';
     return theme;
   },
   openFiles: (kind, multi = true) => pickFiles(kind, multi),
@@ -291,8 +295,10 @@ const api = {
   },
   share: async (token) => {
     const o = outputs.get(token);
-    if (!o || !canShare) return false;
+    if (!o) return false;
     try {
+      if (Native.isAndroid) return await Native.shareOutput(o);
+      if (!canShare) return false;
       await navigator.share({ files: [new File([o.blob], o.name, { type: o.blob.type })], title: o.name });
       return true;
     } catch { return false; }
@@ -310,7 +316,7 @@ const api = {
 window.api = api;
 
 /* ------------------------------------------------------------------ PWA */
-if ('serviceWorker' in navigator && location.protocol !== 'file:' && !window.Capacitor) {
+if ('serviceWorker' in navigator && location.protocol !== 'file:' && !Native.isAndroid) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 let installPrompt = null;

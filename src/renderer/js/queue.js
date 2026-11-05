@@ -75,8 +75,11 @@ window.QueuePage = {
           );
           const caps = (window.APP && window.APP.caps) || {};
           if (caps.download) refs.actions.append(actionBtn('دانلود', 'download', () => window.api.download(j.output), 'btn sm primary'));
-          refs.actions.append(actionBtn('پخش', 'play', () => window.api.openPath(j.output)));
-          if (caps.share) refs.actions.append(actionBtn('اشتراک', 'share', () => window.api.share(j.output)));
+          if (caps.play !== false) refs.actions.append(actionBtn('پخش', 'play', () => window.api.openPath(j.output)));
+          if (caps.share) refs.actions.append(actionBtn(caps.nativeExport ? 'ذخیره / اشتراک' : 'اشتراک', 'share', async () => {
+            try { await window.api.share(j.output); }
+            catch { UI.toast('اشتراک فایل انجام نشد؛ دوباره تلاش کنید.', 'error'); }
+          }));
           if (caps.reveal) refs.actions.append(actionBtn('نمایش در پوشه', 'folder', () => window.api.reveal(j.output)));
           if (j.outputName) refs.result.append(h('div', { class: 'job-out', dir: 'auto', title: j.outputName, text: j.outputName }));
         } else if (j.status === 'error') {

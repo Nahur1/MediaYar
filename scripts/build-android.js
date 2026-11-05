@@ -1,0 +1,15 @@
+'use strict';
+const { spawnSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const root = path.join(__dirname, '..');
+const android = path.join(root, 'android');
+const windows = process.platform === 'win32';
+const result = spawnSync(windows ? 'cmd.exe' : './gradlew', windows ? ['/d','/s','/c','gradlew.bat assembleDebug --console=plain'] : ['assembleDebug','--console=plain'], { cwd: android, env: process.env, stdio: 'inherit' });
+if (result.error) throw result.error;
+if (result.status !== 0) process.exit(result.status || 1);
+const out = path.join(root, 'builds', 'android');
+fs.mkdirSync(out, { recursive: true });
+const file = path.join(out, 'MediaYar-debug.apk');
+fs.copyFileSync(path.join(android,'app','build','outputs','apk','debug','app-debug.apk'), file);
+console.log(`Installable debug APK: ${file}`);

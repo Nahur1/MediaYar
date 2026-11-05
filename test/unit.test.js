@@ -19,6 +19,13 @@ const fakeProbe = (o = {}) => ({
 const argsOf = (plan, out = 'out') => plan.build(out).map((p) => p.args);
 const has = (args, ...seq) => args.some((_, i) => seq.every((s, k) => args[i + k] === s));
 
+test('smart compression budgets a smaller output, including trimmed sources', () => {
+  const p = P.planEdit({ input: 'a.mp4', probe: fakeProbe(), opts: { start: 10, end: 30, compress: { mode: 'smart', codec: 'h265' } } });
+  assert.equal(p.info.targetBytes, 9_000_000);
+  assert.equal(p.info.twoPass, true);
+  assert.equal(p.build('out.mp4').length, 2);
+});
+
 test('time parsing / formatting', () => {
   assert.equal(M.parseTime('1:02:03.5'), 3723.5);
   assert.equal(M.parseTime('90'), 90);

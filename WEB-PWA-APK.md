@@ -1,11 +1,11 @@
 # مدیا یار — نسخه‌ی وب، PWA و APK
 
 ## انتشار نسخه‌ی وب
-محتوای پوشه‌ی `web` (خروجی `node scripts/build-web.js`) یک سایت کاملاً استاتیک است.
+ابتدا `npm ci` و سپس `npm run build:web` را اجرا کنید. محتوای پوشه‌ی `dist/web` یک سایت کاملاً استاتیک است.
 آن را روی هر میزبان **HTTPS** بگذارید (Netlify، Cloudflare Pages، GitHub Pages، Vercel یا هاست معمولی).
 - سرور باید فایل `.wasm` را با نوع `application/wasm` بفرستد (فایل `.htaccess` و `_headers` آماده است).
 - هیچ سرور یا API لازم نیست؛ همه‌ی پردازش در مرورگر کاربر انجام می‌شود و فایلی آپلود نمی‌شود.
-- آزمایش محلی: `node scripts/serve-web.js web 8080` و باز کردن `http://localhost:8080`.
+- آزمایش محلی: `node scripts/serve-web.js dist/web 8080` و باز کردن `http://localhost:8080`.
 
 ## PWA
 manifest، آیکن‌ها (۱۹۲، ۵۱۲ و maskable) و service worker آماده‌اند:
@@ -15,13 +15,17 @@ manifest، آیکن‌ها (۱۹۲، ۵۱۲ و maskable) و service worker آم�
 ## ساخت APK اندروید
 ### روش ۱ — Capacitor (پیشنهادی، فایل APK کامل و آفلاین)
 ```bash
-npm i @capacitor/core @capacitor/cli @capacitor/android
-npx cap init "مدیا یار" ir.mediayar.app --web-dir=web
-npx cap add android
-npx cap sync android
-npx cap open android      # در Android Studio: Build > Build APK(s)
+npm ci
+npm run build:android
+# یا برای باز کردن پروژهٔ موجود در Android Studio:
+npm run android:sync
+npx cap open android
 ```
-فایل `capacitor.config.json` نمونه کنار پروژه هست. در اندروید، فایل‌های خروجی با دکمه‌ی «اشتراک» (Share) ذخیره یا ارسال می‌شوند.
+پروژهٔ واقعی اندروید در `android` موجود است. پیش‌نیازها: JDK 21، Android SDK Platform 36 و Build Tools 36.0.0؛ مسیر SDK را با `ANDROID_HOME` یا `android/local.properties` تنظیم کنید. Gradle Wrapper همراه پروژه است.
+
+خروجی دستور ساخت: `builds/android/MediaYar-debug.apk`؛ این فایل با امضای توسعه قابل نصب مستقیم است. برای انتشار در فروشگاه باید کلید امضای انتشار خودتان را تنظیم کرده و release/AAB بسازید؛ کلید انتشار در پروژه ساخته یا ذخیره نشده است.
+
+موتور پردازش همراه APK بسته‌بندی می‌شود و برای تبدیل به اینترنت نیاز ندارد. خروجی در کش خصوصی برنامه قرار می‌گیرد؛ دکمهٔ «ذخیره / اشتراک» آن را با افزونهٔ بومی Capacitor به برنامهٔ مقصد می‌فرستد. خروجی‌های مهم را پیش از بستن برنامه به محل دائمی منتقل کنید. ضبط صفحه در اندروید پشتیبانی نمی‌شود؛ دکمهٔ آن در WebView پنهان است.
 
 ### روش ۲ — TWA (Bubblewrap)، وقتی نسخه‌ی وب روی دامنه‌ی خودتان منتشر شده است
 ```bash

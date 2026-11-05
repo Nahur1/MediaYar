@@ -1,16 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#A98BFA"/>
-      <stop offset="1" stop-color="#6A3DDB"/>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#9ad7ff"/><stop offset=".48" stop-color="#377dea"/><stop offset="1" stop-color="#645ce2"/>
     </linearGradient>
-    <linearGradient id="y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FEF08A"/>
-      <stop offset="1" stop-color="#FBBF24"/>
-    </linearGradient>
+    <linearGradient id="light" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
   </defs>
-  <rect x="8" y="8" width="240" height="240" rx="64" fill="url(#g)"/>
-  <rect x="44" y="108" width="16" height="40" rx="8" fill="#FFFFFF" opacity=".75"/>
-  <rect x="70" y="88" width="16" height="80" rx="8" fill="#FFFFFF" opacity=".9"/>
-  <path d="M118 80 Q112 76 112 84 L112 172 Q112 180 118 176 L190 134 Q197 128 190 122 Z" fill="url(#y)" stroke="url(#y)" stroke-width="14" stroke-linejoin="round"/>
+  <rect x="8" y="8" width="240" height="240" rx="64" fill="url(#glass)"/>
+  <rect x="10" y="10" width="236" height="236" rx="62" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M16 90V72a56 56 0 0 1 56-56h112a56 56 0 0 1 56 56v18Q128 140 16 90" fill="url(#light)"/>
+  <rect x="44" y="108" width="14" height="40" rx="7" fill="#fff" opacity=".7"/>
+  <rect x="68" y="88" width="14" height="80" rx="7" fill="#fff" opacity=".9"/>
+  <path d="M114 78Q108 74 108 84v88q0 10 8 6l76-44q10-6 0-12z" fill="#fff" fill-opacity=".95" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
 </svg>

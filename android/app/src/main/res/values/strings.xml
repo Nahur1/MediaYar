@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">مدیا یار</string>
+    <string name="title_activity_main">مدیا یار</string>
+    <string name="package_name">ir.mediayar.app</string>
+    <string name="custom_url_scheme">ir.mediayar.app</string>
+</resources>

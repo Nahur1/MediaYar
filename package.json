@@ -7,10 +7,35 @@
   "author": "Media Yar",
   "license": "MIT",
   "scripts": {
-    "test": "node --test test/unit.test.js && node --test --test-concurrency=1 test/integration.test.js",
+    "test": "node scripts/make-fixtures.js && node --test test/unit.test.js && node --test --test-concurrency=1 test/integration.test.js",
     "test:unit": "node --test test/unit.test.js",
     "test:e2e": "node test/e2e.js",
     "icons": "node scripts/make-icons.js",
-    "build:win": "node scripts/build-win.js"
+    "build:win": "node scripts/build-win.js",
+    "build:web": "node scripts/build-web.js",
+    "android:sync": "npm run build:web && node scripts/android-icons.js && cap sync android",
+    "build:android": "npm run android:sync && node scripts/build-android.js",
+    "test:web": "node scripts/make-fixtures.js && node test/web-e2e.js",
+    "test:layout": "node test/ui-layout.js",
+    "test:desktop": "node test/desktop-smoke.js"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@electron/asar": "^4.3.1",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.64.1",
+    "sharp": "^0.35.5"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/share": "^8.0.3",
+    "@ffmpeg/core": "^0.12.10",
+    "@ffmpeg/ffmpeg": "^0.12.15"
+  },
+  "overrides": {
+    "glob": "^14.0.3",
+    "minimatch": "^11.0.4"
   }
 }

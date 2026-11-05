@@ -25,7 +25,7 @@ const assert = (c, m) => { if (!c) throw new Error(`ASSERT: ${m}`); log('ok -', 
   const dl = fs.mkdtempSync(path.join(os.tmpdir(), 'my-web-'));
   const srv = spawn(process.execPath, [path.join(ROOT, 'scripts', 'serve-web.js'), path.join(ROOT, 'dist', 'web'), String(PORT), '--no-isolation'], { stdio: 'ignore' });
   await new Promise((r) => setTimeout(r, 600));
-  const browser = await chromium.launch({ executablePath: process.env.CHROME || '/usr/local/bin/chromium', args: ['--no-sandbox', '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', '--auto-accept-this-tab-capture', '--autoplay-policy=no-user-gesture-required'] });
+  const browser = await chromium.launch({ ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}), args: ['--no-sandbox', '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', '--auto-accept-this-tab-capture', '--autoplay-policy=no-user-gesture-required'] });
   const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 1280, height: 840 } });
   const page = await ctx.newPage();
   // main page: browser without a save picker -> name dialog + regular downloads

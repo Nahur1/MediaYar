@@ -23,7 +23,11 @@
 
   let editor = null;
   function go(page) {
-    document.querySelectorAll('.nav-item').forEach((n) => n.classList.toggle('active', n.dataset.page === page));
+    document.querySelectorAll('.nav-item').forEach((n) => {
+      n.classList.toggle('active', n.dataset.page === page);
+      if (n.dataset.page === page) n.setAttribute('aria-current', 'page');
+      else n.removeAttribute('aria-current');
+    });
     document.querySelectorAll('.page').forEach((p) => p.classList.toggle('active', p.id === `page-${page}`));
     if (page !== 'editor' && editor) editor.pause();
     $('.main').scrollTop = 0;
